@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TransactionsCore\TransactionsCore.csproj" />
     <ProjectReference Include="..\TransactionsData\TransactionsData.csproj" />
+    <ProjectReference Include="..\TransactionsGraphQL\TransactionsGraphQL.csproj" />
   </ItemGroup>
 
 </Project>

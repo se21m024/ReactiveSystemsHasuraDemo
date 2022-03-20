@@ -1,5 +1,6 @@
 using TransactionsCore.Interfaces;
 using TransactionsData;
+using TransactionsGraphQL.Resolvers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,16 +11,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<ITransactionsRepository, TransactionsRepository>();
+builder.Services.AddSingleton<ITransactionsRepository>(
+    DependencyInjection.InitializeCosmosClientInstance(builder.Configuration.GetSection("CosmosDb")));
+
+builder.Services.AddGraphQLServer().AddQueryType<Query>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseRouting().UseEndpoints(endpoints => { endpoints.MapGraphQL(); });
 
 app.UseHttpsRedirection();
 

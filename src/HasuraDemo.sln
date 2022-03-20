@@ -5,9 +5,11 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionsWebApi", "TransactionsWebApi\TransactionsWebApi.csproj", "{29AC4A35-1592-49AB-A1AA-3CA863CD31A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionsData", "TransactionsData\TransactionsData.csproj", "{E4EA572F-72E0-40FD-B98F-DEF0051EC04B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionsData", "TransactionsData\TransactionsData.csproj", "{E4EA572F-72E0-40FD-B98F-DEF0051EC04B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionsCore", "TransactionsCore\TransactionsCore.csproj", "{0101C56E-656B-40D0-9703-06AB919B5265}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionsCore", "TransactionsCore\TransactionsCore.csproj", "{0101C56E-656B-40D0-9703-06AB919B5265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionsGraphQL", "TransactionsGraphQL\TransactionsGraphQL.csproj", "{A6EF1609-7B18-4FB3-A82F-E5F7F343BC30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{0101C56E-656B-40D0-9703-06AB919B5265}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0101C56E-656B-40D0-9703-06AB919B5265}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0101C56E-656B-40D0-9703-06AB919B5265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6EF1609-7B18-4FB3-A82F-E5F7F343BC30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6EF1609-7B18-4FB3-A82F-E5F7F343BC30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6EF1609-7B18-4FB3-A82F-E5F7F343BC30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6EF1609-7B18-4FB3-A82F-E5F7F343BC30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
