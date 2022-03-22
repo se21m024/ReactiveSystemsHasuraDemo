@@ -1,0 +1,8 @@
+﻿query GetPayments {
+  payments {
+    fromIban
+    toIban
+    createDate
+    amount
+  }
+}

@@ -1,0 +1,31 @@
+﻿schema {
+  query: Query
+}
+
+type Query {
+  payments: [Payment!]!
+  paymentById(id: UUID!): Payment!
+  transactions: [Transaction!]!
+}
+
+type Payment {
+  id: UUID!
+  fromIban: String!
+  toIban: String!
+  amount: Float!
+  createDate: DateTime!
+}
+
+scalar UUID
+
+type Transaction {
+  id: UUID!
+  paymentId: UUID!
+  fromIban: String!
+  toIban: String!
+  amount: Float!
+  executionDate: DateTime!
+}
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime

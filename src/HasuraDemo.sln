@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionsCore", "Transac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionsGraphQL", "TransactionsGraphQL\TransactionsGraphQL.csproj", "{A6EF1609-7B18-4FB3-A82F-E5F7F343BC30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionsGui", "TransactionsGui\TransactionsGui.csproj", "{75FE37FB-9299-49AE-B261-4C338A2E1F61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionsGui", "TransactionsGui\TransactionsGui.csproj", "{75FE37FB-9299-49AE-B261-4C338A2E1F61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionsGraphQLClient", "TransactionsGraphQLClient\TransactionsGraphQLClient.csproj", "{C05EB786-D471-4D84-A303-AD5586138AAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{75FE37FB-9299-49AE-B261-4C338A2E1F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75FE37FB-9299-49AE-B261-4C338A2E1F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75FE37FB-9299-49AE-B261-4C338A2E1F61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C05EB786-D471-4D84-A303-AD5586138AAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C05EB786-D471-4D84-A303-AD5586138AAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C05EB786-D471-4D84-A303-AD5586138AAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C05EB786-D471-4D84-A303-AD5586138AAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

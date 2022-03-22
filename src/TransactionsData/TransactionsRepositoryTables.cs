@@ -1,20 +1,15 @@
-﻿using System.Collections.Concurrent;
-using Microsoft.Azure.Cosmos;
+﻿using Microsoft.Azure.Cosmos;
 using TransactionsCore.Interfaces;
 using TransactionsData.Entities;
 using TransactionsData.Mapping;
 
 namespace TransactionsData
 {
-    public class TransactionsRepository : ITransactionsRepository
+    public class TransactionsRepositoryTables : ITransactionsRepository
     {
-        private readonly ConcurrentDictionary<Guid, Payment> _payments = new ();
-
-        private readonly ConcurrentDictionary<Guid, Transaction> _transactions = new();
-
         private readonly Container _container;
 
-        public TransactionsRepository(
+        public TransactionsRepositoryTables(
             CosmosClient cosmosClient,
             string databaseName,
             string containerName)
@@ -28,11 +23,6 @@ namespace TransactionsData
             entity.Id = Guid.NewGuid();
 
             await _container.CreateItemAsync(entity, cancellationToken: ct);
-
-            //if (!_payments.TryAdd(entity.Id, entity))
-            //{
-            //    throw new Exception("Failed to persist payment.");
-            //}
         }
 
         public async Task<IEnumerable<TransactionsCore.Models.Payment>> GetPaymentsAsync(CancellationToken ct)
@@ -41,8 +31,6 @@ namespace TransactionsData
                 .OrderByDescending(x => x.CreateDate)
                 .Select(x => x.ToModel())
                 .AsEnumerable();
-
-            // return _payments.Values.OrderByDescending(x => x.CreateDate).Select(x => x.ToModel());
         }
 
         public async Task<TransactionsCore.Models.Payment> GetPaymentAsync(Guid id, CancellationToken ct)
@@ -50,8 +38,6 @@ namespace TransactionsData
             return _container.GetItemLinqQueryable<Payment>()
                 .First(x => x.Id == id)
                 .ToModel();
-
-            // return _payments.Values.Single(x => x.Id == id).ToModel();
         }
 
         public async Task AddTransactionAsync(TransactionsCore.Models.Transaction transaction, CancellationToken ct)
@@ -60,11 +46,6 @@ namespace TransactionsData
             entity.Id = Guid.NewGuid();
 
             await _container.CreateItemAsync(entity, cancellationToken: ct);
-
-            //if (!_transactions.TryAdd(entity.Id, entity))
-            //{
-            //    throw new Exception("Failed to persist transaction.");
-            //}
         }
 
         public async Task<IEnumerable<TransactionsCore.Models.Transaction>> GetTransactionsAsync(CancellationToken ct)
@@ -73,8 +54,6 @@ namespace TransactionsData
                 .OrderByDescending(x => x.ExecutionDate)
                 .Select(x => x.ToModel())
                 .AsEnumerable();
-
-            // return _transactions.Values.OrderByDescending(x => x.ExecutionDate).Select(x => x.ToModel());
         }
     }
 }

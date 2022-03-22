@@ -1,4 +1,6 @@
 ﻿@page "/"
+@inject TransactionsClient TransactionsClient
+@implements IDisposable
 
 <PageTitle>Index</PageTitle>
 
@@ -7,3 +9,49 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+<ul>
+    @foreach (string payment in payments) {
+        <li>@payment</li>
+    }
+</ul>
+
+@code {
+    private string[] payments = Array.Empty<string>();
+
+    // Fetch only once
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    var result = await TransactionsClient.GetPayments.ExecuteAsync();
+    //    payments = result.Data.Payments
+    //        .Select(x => $"From {x.FromIban}, To {x.ToIban}: {x.Amount}")
+    //        .ToArray();
+    //}
+
+    // Subscribe for push
+    private IDisposable storeSession;
+
+    protected override void OnInitialized()
+    {
+        storeSession =
+            TransactionsClient
+                .GetPayments
+                //.Watch(StrawberryShake.ExecutionStrategy.CacheFirst)
+                .Watch(StrawberryShake.ExecutionStrategy.NetworkOnly)
+                .Where(t => !t.Errors.Any())
+                .Select(t =>
+                    t.Data.Payments
+                        .Select(x => $"From {x.FromIban}, To {x.ToIban}: {x.Amount}")
+                        .ToArray())
+                .Subscribe(result =>
+                {
+                    payments = result;
+                    StateHasChanged();
+                });
+    }
+
+    public void Dispose()
+    {
+        storeSession?.Dispose();
+    }
+}
