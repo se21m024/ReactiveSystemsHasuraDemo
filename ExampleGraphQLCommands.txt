@@ -19,6 +19,16 @@ query {
 }
 
 query {
+  transactions {
+    fromIban
+    toIban
+    id
+    executionDate
+    amount
+  }
+}
+
+query {
   paymentById (id: "a9546080-1a48-4e08-bf66-2aeef12eba03") {
     fromIban,
     toIban,

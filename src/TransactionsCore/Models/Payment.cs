@@ -10,6 +10,6 @@
 
         public double Amount { get; set; }
 
-        public DateTimeOffset CreateDate { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset CreateDate { get; set; }
     }
 }

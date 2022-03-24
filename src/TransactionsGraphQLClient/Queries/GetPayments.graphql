@@ -1,8 +1,9 @@
 ﻿query GetPayments {
   payments {
+    id
     fromIban
     toIban
-    createDate
     amount
+    createDate
   }
 }

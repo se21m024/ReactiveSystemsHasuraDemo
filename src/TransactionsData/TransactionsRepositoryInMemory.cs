@@ -36,8 +36,7 @@ namespace TransactionsData
 
         public async Task<TransactionsCore.Models.Payment> AddPaymentAsync(TransactionsCore.Models.PaymentRequest payment, CancellationToken ct)
         {
-            var entity = payment.ToEntity();
-            entity.Id = Guid.NewGuid();
+            var entity = payment.CreateNewEntity();
 
             if (!_payments.TryAdd(entity.Id, entity))
             {
@@ -59,12 +58,25 @@ namespace TransactionsData
 
         public async Task<TransactionsCore.Models.Transaction> AddTransactionAsync(TransactionsCore.Models.Transaction transaction, CancellationToken ct)
         {
-            var entity = transaction.ToEntity();
-            entity.Id = Guid.NewGuid();
+            var entity = transaction.CreateNewEntity();
 
             if (!_transactions.TryAdd(entity.Id, entity))
             {
                 throw new Exception("Failed to persist transaction.");
+            }
+
+            return entity.ToModel();
+        }
+
+        public async Task<TransactionsCore.Models.Transaction> AddTransactionFromPaymentAsync(
+            TransactionsCore.Models.Payment payment,
+            CancellationToken ct)
+        {
+            var entity = payment.CreateNewTransactionEntity();
+
+            if (!_transactions.TryAdd(entity.Id, entity))
+            {
+                throw new Exception("Failed to persist transaction from payment.");
             }
 
             return entity.ToModel();

@@ -12,9 +12,19 @@ namespace TransactionsGraphQL.Resolvers
             _transactionsRepository = transactionsRepository;
         }
 
-        public async Task<Payment> AddPaymentAsync(PaymentRequest payment, CancellationToken ct)
+        public Payment AddPayment(PaymentRequest payment)
         {
-            return await _transactionsRepository.AddPaymentAsync(payment, ct);
+            var newPayment = _transactionsRepository
+                .AddPaymentAsync(payment, CancellationToken.None)
+                .GetAwaiter()
+                .GetResult();
+
+            _transactionsRepository
+                .AddTransactionFromPaymentAsync(newPayment, CancellationToken.None)
+                .GetAwaiter()
+                .GetResult();
+
+            return newPayment;
         }
     }
 }

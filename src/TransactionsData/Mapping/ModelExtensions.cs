@@ -4,19 +4,7 @@ namespace TransactionsData.Mapping
 {
     public static class ModelExtensions
     {
-        public static Payment ToEntity(this TransactionsCore.Models.Payment payment)
-        {
-            return new Payment
-            {
-                Id = payment.Id,
-                FromIban = payment.FromIban,
-                ToIban = payment.ToIban,
-                Amount = payment.Amount,
-                CreateDate = payment.CreateDate,
-            };
-        }
-
-        public static Payment ToEntity(this TransactionsCore.Models.PaymentRequest payment)
+        public static Payment CreateNewEntity(this TransactionsCore.Models.Payment payment)
         {
             return new Payment
             {
@@ -26,16 +14,35 @@ namespace TransactionsData.Mapping
             };
         }
 
-        public static Transaction ToEntity(this TransactionsCore.Models.Transaction transaction)
+        public static Payment CreateNewEntity(this TransactionsCore.Models.PaymentRequest payment)
+        {
+            return new Payment
+            {
+                FromIban = payment.FromIban,
+                ToIban = payment.ToIban,
+                Amount = payment.Amount,
+            };
+        }
+
+        public static Transaction CreateNewTransactionEntity(this TransactionsCore.Models.Payment payment)
         {
             return new Transaction
             {
-                Id = transaction.Id,
+                PaymentId = payment.Id,
+                FromIban = payment.FromIban,
+                ToIban = payment.ToIban,
+                Amount = payment.Amount,
+            };
+        }
+
+        public static Transaction CreateNewEntity(this TransactionsCore.Models.Transaction transaction)
+        {
+            return new Transaction
+            {
                 PaymentId = transaction.PaymentId,
                 FromIban = transaction.FromIban,
                 ToIban = transaction.ToIban,
                 Amount = transaction.Amount,
-                ExecutionDate = transaction.ExecutionDate,
             };
         }
     }

@@ -12,6 +12,8 @@ namespace TransactionsCore.Interfaces
 
         Task<Transaction> AddTransactionAsync(Transaction transaction, CancellationToken ct);
 
+        Task<Transaction> AddTransactionFromPaymentAsync(Payment payment, CancellationToken ct);
+
         Task<IEnumerable<Transaction>> GetTransactionsAsync(CancellationToken ct);
     }
 }

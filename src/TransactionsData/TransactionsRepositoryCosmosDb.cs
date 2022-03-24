@@ -19,7 +19,7 @@ namespace TransactionsData
 
         public async Task<TransactionsCore.Models.Payment> AddPaymentAsync(TransactionsCore.Models.PaymentRequest payment, CancellationToken ct)
         {
-            var entity = payment.ToEntity();
+            var entity = payment.CreateNewEntity();
             entity.Id = Guid.NewGuid();
 
             await _container.CreateItemAsync(entity, cancellationToken: ct);
@@ -43,11 +43,18 @@ namespace TransactionsData
 
         public async Task<TransactionsCore.Models.Transaction> AddTransactionAsync(TransactionsCore.Models.Transaction transaction, CancellationToken ct)
         {
-            var entity = transaction.ToEntity();
+            var entity = transaction.CreateNewEntity();
             entity.Id = Guid.NewGuid();
 
             await _container.CreateItemAsync(entity, cancellationToken: ct);
             return entity.ToModel();
+        }
+
+        public async Task<TransactionsCore.Models.Transaction> AddTransactionFromPaymentAsync(
+            TransactionsCore.Models.Payment payment,
+            CancellationToken ct)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<TransactionsCore.Models.Transaction>> GetTransactionsAsync(CancellationToken ct)

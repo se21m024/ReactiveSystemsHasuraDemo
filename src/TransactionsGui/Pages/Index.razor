@@ -10,14 +10,22 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
+<h2>Payments</h2>
 <ul>
-    @foreach (string payment in payments) {
+    @foreach (var payment in payments) {
         <li>@payment</li>
+    }
+</ul>
+<h2>Transactions</h2>
+<ul>
+    @foreach (var transaction in transactions) {
+        <li>@transaction</li>
     }
 </ul>
 
 @code {
     private string[] payments = Array.Empty<string>();
+    private string[] transactions = Array.Empty<string>();
 
     // Fetch only once
     //protected override async Task OnInitializedAsync()
@@ -29,29 +37,47 @@ Welcome to your new app.
     //}
 
     // Subscribe for push -> does not work. Issue: Fetches only when menu is (re)initialized
-    private IDisposable storeSession;
+    private IDisposable storePayment;
+    private IDisposable storeTransaction;
 
     protected override void OnInitialized()
     {
-        storeSession =
+        storePayment =
             TransactionsClient
                 .GetPayments
-                //.Watch(StrawberryShake.ExecutionStrategy.CacheFirst)
+    //.Watch(StrawberryShake.ExecutionStrategy.CacheFirst)
                 .Watch(StrawberryShake.ExecutionStrategy.NetworkOnly)
                 .Where(t => !t.Errors.Any())
                 .Select(t =>
                     t.Data.Payments
-                        .Select(x => $"From {x.FromIban}, To {x.ToIban}: {x.Amount}")
+                        .Select(x => $"From '{x.FromIban}' to '{x.ToIban}': {x.Amount} €, at '{x.CreateDate}'")
                         .ToArray())
                 .Subscribe(result =>
                 {
                     payments = result;
                     StateHasChanged();
                 });
+
+        storeTransaction =
+            TransactionsClient
+                .GetTransactions
+    //.Watch(StrawberryShake.ExecutionStrategy.CacheFirst)
+                .Watch(StrawberryShake.ExecutionStrategy.NetworkOnly)
+                .Where(t => !t.Errors.Any())
+                .Select(t =>
+                    t.Data.Transactions
+                        .Select(x => $"From '{x.FromIban}' to '{x.ToIban}': {x.Amount} €, at '{x.ExecutionDate}'")
+                        .ToArray())
+                .Subscribe(result =>
+                {
+                    transactions = result;
+                    StateHasChanged();
+                });
     }
 
     public void Dispose()
     {
-        storeSession?.Dispose();
+        storePayment?.Dispose();
+        storeTransaction?.Dispose();
     }
 }

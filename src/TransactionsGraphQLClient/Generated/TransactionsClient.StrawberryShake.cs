@@ -15,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 return new ClientServiceProvider(global::Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(serviceCollection));
             });
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton(services, sp => new global::TransactionsGraphQLClient.State.TransactionsClientStoreAccessor(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::StrawberryShake.IOperationStore>(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<ClientServiceProvider>(sp)), global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::StrawberryShake.IEntityStore>(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<ClientServiceProvider>(sp)), global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::StrawberryShake.IEntityIdSerializer>(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<ClientServiceProvider>(sp)), global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::System.Collections.Generic.IEnumerable<global::StrawberryShake.IOperationRequestFactory>>(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<ClientServiceProvider>(sp)), global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::System.Collections.Generic.IEnumerable<global::StrawberryShake.IOperationResultDataFactory>>(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<ClientServiceProvider>(sp))));
+            global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton(services, sp => global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::TransactionsGraphQLClient.GetTransactionsQuery>(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<ClientServiceProvider>(sp)));
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton(services, sp => global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::TransactionsGraphQLClient.GetPaymentsQuery>(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<ClientServiceProvider>(sp)));
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton(services, sp => global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::TransactionsGraphQLClient.TransactionsClient>(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<ClientServiceProvider>(sp)));
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton(services, sp => global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::TransactionsGraphQLClient.ITransactionsClient>(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<ClientServiceProvider>(sp)));
@@ -30,6 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 var clientFactory = global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::System.Net.Http.IHttpClientFactory>(parentServices);
                 return new global::StrawberryShake.Transport.Http.HttpConnection(() => clientFactory.CreateClient("TransactionsClient"));
             });
+            global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.IEntityMapper<global::TransactionsGraphQLClient.State.TransactionEntity, global::TransactionsGraphQLClient.GetTransactions_Transactions_Transaction>, global::TransactionsGraphQLClient.State.GetTransactions_Transactions_TransactionFromTransactionEntityMapper>(services);
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.IEntityMapper<global::TransactionsGraphQLClient.State.PaymentEntity, global::TransactionsGraphQLClient.GetPayments_Payments_Payment>, global::TransactionsGraphQLClient.State.GetPayments_Payments_PaymentFromPaymentEntityMapper>(services);
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.Serialization.ISerializer, global::StrawberryShake.Serialization.StringSerializer>(services);
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.Serialization.ISerializer, global::StrawberryShake.Serialization.BooleanSerializer>(services);
@@ -48,6 +50,13 @@ namespace Microsoft.Extensions.DependencyInjection
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.Serialization.ISerializer, global::StrawberryShake.Serialization.TimeSpanSerializer>(services);
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.Serialization.ISerializer, global::StrawberryShake.Serialization.JsonSerializer>(services);
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.Serialization.ISerializerResolver>(services, sp => new global::StrawberryShake.Serialization.SerializerResolver(global::System.Linq.Enumerable.Concat(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::System.Collections.Generic.IEnumerable<global::StrawberryShake.Serialization.ISerializer>>(parentServices), global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::System.Collections.Generic.IEnumerable<global::StrawberryShake.Serialization.ISerializer>>(sp))));
+            global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.IOperationResultDataFactory<global::TransactionsGraphQLClient.IGetTransactionsResult>, global::TransactionsGraphQLClient.State.GetTransactionsResultFactory>(services);
+            global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.IOperationResultDataFactory>(services, sp => global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::StrawberryShake.IOperationResultDataFactory<global::TransactionsGraphQLClient.IGetTransactionsResult>>(sp));
+            global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.IOperationRequestFactory>(services, sp => global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::TransactionsGraphQLClient.IGetTransactionsQuery>(sp));
+            global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.IOperationResultBuilder<global::System.Text.Json.JsonDocument, global::TransactionsGraphQLClient.IGetTransactionsResult>, global::TransactionsGraphQLClient.State.GetTransactionsBuilder>(services);
+            global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.IOperationExecutor<global::TransactionsGraphQLClient.IGetTransactionsResult>>(services, sp => new global::StrawberryShake.OperationExecutor<global::System.Text.Json.JsonDocument, global::TransactionsGraphQLClient.IGetTransactionsResult>(global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::StrawberryShake.Transport.Http.IHttpConnection>(sp), () => global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::StrawberryShake.IOperationResultBuilder<global::System.Text.Json.JsonDocument, global::TransactionsGraphQLClient.IGetTransactionsResult>>(sp), global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::StrawberryShake.IOperationStore>(sp), strategy));
+            global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::TransactionsGraphQLClient.GetTransactionsQuery>(services);
+            global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::TransactionsGraphQLClient.IGetTransactionsQuery>(services, sp => global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::TransactionsGraphQLClient.GetTransactionsQuery>(sp));
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.IOperationResultDataFactory<global::TransactionsGraphQLClient.IGetPaymentsResult>, global::TransactionsGraphQLClient.State.GetPaymentsResultFactory>(services);
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.IOperationResultDataFactory>(services, sp => global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::StrawberryShake.IOperationResultDataFactory<global::TransactionsGraphQLClient.IGetPaymentsResult>>(sp));
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::StrawberryShake.IOperationRequestFactory>(services, sp => global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::TransactionsGraphQLClient.IGetPaymentsQuery>(sp));
@@ -87,6 +96,173 @@ namespace Microsoft.Extensions.DependencyInjection
 
 namespace TransactionsGraphQLClient
 {
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial class GetTransactionsResult : global::System.IEquatable<GetTransactionsResult>, IGetTransactionsResult
+    {
+        public GetTransactionsResult(global::System.Collections.Generic.IReadOnlyList<global::TransactionsGraphQLClient.IGetTransactions_Transactions> transactions)
+        {
+            Transactions = transactions;
+        }
+
+        public global::System.Collections.Generic.IReadOnlyList<global::TransactionsGraphQLClient.IGetTransactions_Transactions> Transactions { get; }
+
+        public virtual global::System.Boolean Equals(GetTransactionsResult? other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (other.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return (global::StrawberryShake.Helper.ComparisonHelper.SequenceEqual(Transactions, other.Transactions));
+        }
+
+        public override global::System.Boolean Equals(global::System.Object? obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return Equals((GetTransactionsResult)obj);
+        }
+
+        public override global::System.Int32 GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 5;
+                foreach (var Transactions_elm in Transactions)
+                {
+                    hash ^= 397 * Transactions_elm.GetHashCode();
+                }
+
+                return hash;
+            }
+        }
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial class GetTransactions_Transactions_Transaction : global::System.IEquatable<GetTransactions_Transactions_Transaction>, IGetTransactions_Transactions_Transaction
+    {
+        public GetTransactions_Transactions_Transaction(global::System.Guid id, global::System.String fromIban, global::System.String toIban, global::System.Double amount, global::System.DateTimeOffset executionDate)
+        {
+            Id = id;
+            FromIban = fromIban;
+            ToIban = toIban;
+            Amount = amount;
+            ExecutionDate = executionDate;
+        }
+
+        public global::System.Guid Id { get; }
+
+        public global::System.String FromIban { get; }
+
+        public global::System.String ToIban { get; }
+
+        public global::System.Double Amount { get; }
+
+        public global::System.DateTimeOffset ExecutionDate { get; }
+
+        public virtual global::System.Boolean Equals(GetTransactions_Transactions_Transaction? other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (other.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return (Id.Equals(other.Id)) && FromIban.Equals(other.FromIban) && ToIban.Equals(other.ToIban) && Amount == other.Amount && ExecutionDate.Equals(other.ExecutionDate);
+        }
+
+        public override global::System.Boolean Equals(global::System.Object? obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return Equals((GetTransactions_Transactions_Transaction)obj);
+        }
+
+        public override global::System.Int32 GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 5;
+                hash ^= 397 * Id.GetHashCode();
+                hash ^= 397 * FromIban.GetHashCode();
+                hash ^= 397 * ToIban.GetHashCode();
+                hash ^= 397 * Amount.GetHashCode();
+                hash ^= 397 * ExecutionDate.GetHashCode();
+                return hash;
+            }
+        }
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial interface IGetTransactionsResult
+    {
+        public global::System.Collections.Generic.IReadOnlyList<global::TransactionsGraphQLClient.IGetTransactions_Transactions> Transactions { get; }
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial interface IGetTransactions_Transactions
+    {
+        public global::System.Guid Id { get; }
+
+        public global::System.String FromIban { get; }
+
+        public global::System.String ToIban { get; }
+
+        public global::System.Double Amount { get; }
+
+        public global::System.DateTimeOffset ExecutionDate { get; }
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial interface IGetTransactions_Transactions_Transaction : IGetTransactions_Transactions
+    {
+    }
+
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
     public partial class GetPaymentsResult : global::System.IEquatable<GetPaymentsResult>, IGetPaymentsResult
     {
@@ -155,21 +331,24 @@ namespace TransactionsGraphQLClient
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
     public partial class GetPayments_Payments_Payment : global::System.IEquatable<GetPayments_Payments_Payment>, IGetPayments_Payments_Payment
     {
-        public GetPayments_Payments_Payment(global::System.String fromIban, global::System.String toIban, global::System.DateTimeOffset createDate, global::System.Double amount)
+        public GetPayments_Payments_Payment(global::System.Guid id, global::System.String fromIban, global::System.String toIban, global::System.Double amount, global::System.DateTimeOffset createDate)
         {
+            Id = id;
             FromIban = fromIban;
             ToIban = toIban;
-            CreateDate = createDate;
             Amount = amount;
+            CreateDate = createDate;
         }
+
+        public global::System.Guid Id { get; }
 
         public global::System.String FromIban { get; }
 
         public global::System.String ToIban { get; }
 
-        public global::System.DateTimeOffset CreateDate { get; }
-
         public global::System.Double Amount { get; }
+
+        public global::System.DateTimeOffset CreateDate { get; }
 
         public virtual global::System.Boolean Equals(GetPayments_Payments_Payment? other)
         {
@@ -188,7 +367,7 @@ namespace TransactionsGraphQLClient
                 return false;
             }
 
-            return (FromIban.Equals(other.FromIban)) && ToIban.Equals(other.ToIban) && CreateDate.Equals(other.CreateDate) && Amount == other.Amount;
+            return (Id.Equals(other.Id)) && FromIban.Equals(other.FromIban) && ToIban.Equals(other.ToIban) && Amount == other.Amount && CreateDate.Equals(other.CreateDate);
         }
 
         public override global::System.Boolean Equals(global::System.Object? obj)
@@ -216,10 +395,11 @@ namespace TransactionsGraphQLClient
             unchecked
             {
                 int hash = 5;
+                hash ^= 397 * Id.GetHashCode();
                 hash ^= 397 * FromIban.GetHashCode();
                 hash ^= 397 * ToIban.GetHashCode();
-                hash ^= 397 * CreateDate.GetHashCode();
                 hash ^= 397 * Amount.GetHashCode();
+                hash ^= 397 * CreateDate.GetHashCode();
                 return hash;
             }
         }
@@ -234,13 +414,15 @@ namespace TransactionsGraphQLClient
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
     public partial interface IGetPayments_Payments
     {
+        public global::System.Guid Id { get; }
+
         public global::System.String FromIban { get; }
 
         public global::System.String ToIban { get; }
 
-        public global::System.DateTimeOffset CreateDate { get; }
-
         public global::System.Double Amount { get; }
+
+        public global::System.DateTimeOffset CreateDate { get; }
     }
 
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
@@ -249,15 +431,136 @@ namespace TransactionsGraphQLClient
     }
 
     /// <summary>
+    /// Represents the operation service of the GetTransactions GraphQL operation
+    /// <code>
+    /// query GetTransactions {
+    ///   transactions {
+    ///     __typename
+    ///     id
+    ///     fromIban
+    ///     toIban
+    ///     amount
+    ///     executionDate
+    ///     ... on Transaction {
+    ///       id
+    ///     }
+    ///   }
+    /// }
+    /// </code>
+    /// </summary>
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial class GetTransactionsQueryDocument : global::StrawberryShake.IDocument
+    {
+        private GetTransactionsQueryDocument()
+        {
+        }
+
+        public static GetTransactionsQueryDocument Instance { get; } = new GetTransactionsQueryDocument();
+        public global::StrawberryShake.OperationKind Kind => global::StrawberryShake.OperationKind.Query;
+        public global::System.ReadOnlySpan<global::System.Byte> Body => new global::System.Byte[]{0x71, 0x75, 0x65, 0x72, 0x79, 0x20, 0x47, 0x65, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x20, 0x7b, 0x20, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x20, 0x7b, 0x20, 0x5f, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x6e, 0x61, 0x6d, 0x65, 0x20, 0x69, 0x64, 0x20, 0x66, 0x72, 0x6f, 0x6d, 0x49, 0x62, 0x61, 0x6e, 0x20, 0x74, 0x6f, 0x49, 0x62, 0x61, 0x6e, 0x20, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x20, 0x65, 0x78, 0x65, 0x63, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x61, 0x74, 0x65, 0x20, 0x2e, 0x2e, 0x2e, 0x20, 0x6f, 0x6e, 0x20, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x20, 0x7b, 0x20, 0x69, 0x64, 0x20, 0x7d, 0x20, 0x7d, 0x20, 0x7d};
+        public global::StrawberryShake.DocumentHash Hash { get; } = new global::StrawberryShake.DocumentHash("md5Hash", "5cfa863a1e5f5e77475ff10520ba44d0");
+        public override global::System.String ToString()
+        {
+#if NETSTANDARD2_0
+        return global::System.Text.Encoding.UTF8.GetString(Body.ToArray());
+#else
+            return global::System.Text.Encoding.UTF8.GetString(Body);
+#endif
+        }
+    }
+
+    /// <summary>
+    /// Represents the operation service of the GetTransactions GraphQL operation
+    /// <code>
+    /// query GetTransactions {
+    ///   transactions {
+    ///     __typename
+    ///     id
+    ///     fromIban
+    ///     toIban
+    ///     amount
+    ///     executionDate
+    ///     ... on Transaction {
+    ///       id
+    ///     }
+    ///   }
+    /// }
+    /// </code>
+    /// </summary>
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial class GetTransactionsQuery : global::TransactionsGraphQLClient.IGetTransactionsQuery
+    {
+        private readonly global::StrawberryShake.IOperationExecutor<IGetTransactionsResult> _operationExecutor;
+        public GetTransactionsQuery(global::StrawberryShake.IOperationExecutor<IGetTransactionsResult> operationExecutor)
+        {
+            _operationExecutor = operationExecutor ?? throw new global::System.ArgumentNullException(nameof(operationExecutor));
+        }
+
+        global::System.Type global::StrawberryShake.IOperationRequestFactory.ResultType => typeof(IGetTransactionsResult);
+        public async global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IGetTransactionsResult>> ExecuteAsync(global::System.Threading.CancellationToken cancellationToken = default)
+        {
+            var request = CreateRequest();
+            return await _operationExecutor.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
+        public global::System.IObservable<global::StrawberryShake.IOperationResult<IGetTransactionsResult>> Watch(global::StrawberryShake.ExecutionStrategy? strategy = null)
+        {
+            var request = CreateRequest();
+            return _operationExecutor.Watch(request, strategy);
+        }
+
+        private global::StrawberryShake.OperationRequest CreateRequest()
+        {
+            return CreateRequest(null);
+        }
+
+        private global::StrawberryShake.OperationRequest CreateRequest(global::System.Collections.Generic.IReadOnlyDictionary<global::System.String, global::System.Object?>? variables)
+        {
+            return new global::StrawberryShake.OperationRequest(id: GetTransactionsQueryDocument.Instance.Hash.Value, name: "GetTransactions", document: GetTransactionsQueryDocument.Instance, strategy: global::StrawberryShake.RequestStrategy.Default);
+        }
+
+        global::StrawberryShake.OperationRequest global::StrawberryShake.IOperationRequestFactory.Create(global::System.Collections.Generic.IReadOnlyDictionary<global::System.String, global::System.Object?>? variables)
+        {
+            return CreateRequest();
+        }
+    }
+
+    /// <summary>
+    /// Represents the operation service of the GetTransactions GraphQL operation
+    /// <code>
+    /// query GetTransactions {
+    ///   transactions {
+    ///     __typename
+    ///     id
+    ///     fromIban
+    ///     toIban
+    ///     amount
+    ///     executionDate
+    ///     ... on Transaction {
+    ///       id
+    ///     }
+    ///   }
+    /// }
+    /// </code>
+    /// </summary>
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial interface IGetTransactionsQuery : global::StrawberryShake.IOperationRequestFactory
+    {
+        global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IGetTransactionsResult>> ExecuteAsync(global::System.Threading.CancellationToken cancellationToken = default);
+        global::System.IObservable<global::StrawberryShake.IOperationResult<IGetTransactionsResult>> Watch(global::StrawberryShake.ExecutionStrategy? strategy = null);
+    }
+
+    /// <summary>
     /// Represents the operation service of the GetPayments GraphQL operation
     /// <code>
     /// query GetPayments {
     ///   payments {
     ///     __typename
+    ///     id
     ///     fromIban
     ///     toIban
-    ///     createDate
     ///     amount
+    ///     createDate
     ///     ... on Payment {
     ///       id
     ///     }
@@ -274,8 +577,8 @@ namespace TransactionsGraphQLClient
 
         public static GetPaymentsQueryDocument Instance { get; } = new GetPaymentsQueryDocument();
         public global::StrawberryShake.OperationKind Kind => global::StrawberryShake.OperationKind.Query;
-        public global::System.ReadOnlySpan<global::System.Byte> Body => new global::System.Byte[]{0x71, 0x75, 0x65, 0x72, 0x79, 0x20, 0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x20, 0x7b, 0x20, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x20, 0x7b, 0x20, 0x5f, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x6e, 0x61, 0x6d, 0x65, 0x20, 0x66, 0x72, 0x6f, 0x6d, 0x49, 0x62, 0x61, 0x6e, 0x20, 0x74, 0x6f, 0x49, 0x62, 0x61, 0x6e, 0x20, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x61, 0x74, 0x65, 0x20, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x20, 0x2e, 0x2e, 0x2e, 0x20, 0x6f, 0x6e, 0x20, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x20, 0x7b, 0x20, 0x69, 0x64, 0x20, 0x7d, 0x20, 0x7d, 0x20, 0x7d};
-        public global::StrawberryShake.DocumentHash Hash { get; } = new global::StrawberryShake.DocumentHash("md5Hash", "eea7ffb7cb197fd064ca1ae72d1147b9");
+        public global::System.ReadOnlySpan<global::System.Byte> Body => new global::System.Byte[]{0x71, 0x75, 0x65, 0x72, 0x79, 0x20, 0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x20, 0x7b, 0x20, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x20, 0x7b, 0x20, 0x5f, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x6e, 0x61, 0x6d, 0x65, 0x20, 0x69, 0x64, 0x20, 0x66, 0x72, 0x6f, 0x6d, 0x49, 0x62, 0x61, 0x6e, 0x20, 0x74, 0x6f, 0x49, 0x62, 0x61, 0x6e, 0x20, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x20, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x61, 0x74, 0x65, 0x20, 0x2e, 0x2e, 0x2e, 0x20, 0x6f, 0x6e, 0x20, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x20, 0x7b, 0x20, 0x69, 0x64, 0x20, 0x7d, 0x20, 0x7d, 0x20, 0x7d};
+        public global::StrawberryShake.DocumentHash Hash { get; } = new global::StrawberryShake.DocumentHash("md5Hash", "c0397a82cc46782e55326ab1a4a29b0c");
         public override global::System.String ToString()
         {
 #if NETSTANDARD2_0
@@ -292,10 +595,11 @@ namespace TransactionsGraphQLClient
     /// query GetPayments {
     ///   payments {
     ///     __typename
+    ///     id
     ///     fromIban
     ///     toIban
-    ///     createDate
     ///     amount
+    ///     createDate
     ///     ... on Payment {
     ///       id
     ///     }
@@ -347,10 +651,11 @@ namespace TransactionsGraphQLClient
     /// query GetPayments {
     ///   payments {
     ///     __typename
+    ///     id
     ///     fromIban
     ///     toIban
-    ///     createDate
     ///     amount
+    ///     createDate
     ///     ... on Payment {
     ///       id
     ///     }
@@ -371,13 +676,16 @@ namespace TransactionsGraphQLClient
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
     public partial class TransactionsClient : global::TransactionsGraphQLClient.ITransactionsClient
     {
+        private readonly global::TransactionsGraphQLClient.IGetTransactionsQuery _getTransactions;
         private readonly global::TransactionsGraphQLClient.IGetPaymentsQuery _getPayments;
-        public TransactionsClient(global::TransactionsGraphQLClient.IGetPaymentsQuery getPayments)
+        public TransactionsClient(global::TransactionsGraphQLClient.IGetTransactionsQuery getTransactions, global::TransactionsGraphQLClient.IGetPaymentsQuery getPayments)
         {
+            _getTransactions = getTransactions ?? throw new global::System.ArgumentNullException(nameof(getTransactions));
             _getPayments = getPayments ?? throw new global::System.ArgumentNullException(nameof(getPayments));
         }
 
         public static global::System.String ClientName => "TransactionsClient";
+        public global::TransactionsGraphQLClient.IGetTransactionsQuery GetTransactions => _getTransactions;
         public global::TransactionsGraphQLClient.IGetPaymentsQuery GetPayments => _getPayments;
     }
 
@@ -387,6 +695,8 @@ namespace TransactionsGraphQLClient
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
     public partial interface ITransactionsClient
     {
+        global::TransactionsGraphQLClient.IGetTransactionsQuery GetTransactions { get; }
+
         global::TransactionsGraphQLClient.IGetPaymentsQuery GetPayments { get; }
     }
 }
@@ -394,23 +704,150 @@ namespace TransactionsGraphQLClient
 namespace TransactionsGraphQLClient.State
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
-    public partial class PaymentEntity
+    public partial class TransactionEntity
     {
-        public PaymentEntity(global::System.String fromIban = default !, global::System.String toIban = default !, global::System.DateTimeOffset createDate = default !, global::System.Double amount = default !)
+        public TransactionEntity(global::System.Guid id = default !, global::System.String fromIban = default !, global::System.String toIban = default !, global::System.Double amount = default !, global::System.DateTimeOffset executionDate = default !)
         {
+            Id = id;
             FromIban = fromIban;
             ToIban = toIban;
-            CreateDate = createDate;
             Amount = amount;
+            ExecutionDate = executionDate;
         }
+
+        public global::System.Guid Id { get; }
 
         public global::System.String FromIban { get; }
 
         public global::System.String ToIban { get; }
 
-        public global::System.DateTimeOffset CreateDate { get; }
+        public global::System.Double Amount { get; }
+
+        public global::System.DateTimeOffset ExecutionDate { get; }
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial class PaymentEntity
+    {
+        public PaymentEntity(global::System.Guid id = default !, global::System.String fromIban = default !, global::System.String toIban = default !, global::System.Double amount = default !, global::System.DateTimeOffset createDate = default !)
+        {
+            Id = id;
+            FromIban = fromIban;
+            ToIban = toIban;
+            Amount = amount;
+            CreateDate = createDate;
+        }
+
+        public global::System.Guid Id { get; }
+
+        public global::System.String FromIban { get; }
+
+        public global::System.String ToIban { get; }
 
         public global::System.Double Amount { get; }
+
+        public global::System.DateTimeOffset CreateDate { get; }
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial class GetTransactionsResultFactory : global::StrawberryShake.IOperationResultDataFactory<global::TransactionsGraphQLClient.GetTransactionsResult>
+    {
+        private readonly global::StrawberryShake.IEntityStore _entityStore;
+        private readonly global::StrawberryShake.IEntityMapper<global::TransactionsGraphQLClient.State.TransactionEntity, GetTransactions_Transactions_Transaction> _getTransactions_Transactions_TransactionFromTransactionEntityMapper;
+        public GetTransactionsResultFactory(global::StrawberryShake.IEntityStore entityStore, global::StrawberryShake.IEntityMapper<global::TransactionsGraphQLClient.State.TransactionEntity, GetTransactions_Transactions_Transaction> getTransactions_Transactions_TransactionFromTransactionEntityMapper)
+        {
+            _entityStore = entityStore ?? throw new global::System.ArgumentNullException(nameof(entityStore));
+            _getTransactions_Transactions_TransactionFromTransactionEntityMapper = getTransactions_Transactions_TransactionFromTransactionEntityMapper ?? throw new global::System.ArgumentNullException(nameof(getTransactions_Transactions_TransactionFromTransactionEntityMapper));
+        }
+
+        global::System.Type global::StrawberryShake.IOperationResultDataFactory.ResultType => typeof(global::TransactionsGraphQLClient.IGetTransactionsResult);
+        public GetTransactionsResult Create(global::StrawberryShake.IOperationResultDataInfo dataInfo, global::StrawberryShake.IEntityStoreSnapshot? snapshot = null)
+        {
+            if (snapshot is null)
+            {
+                snapshot = _entityStore.CurrentSnapshot;
+            }
+
+            if (dataInfo is GetTransactionsResultInfo info)
+            {
+                return new GetTransactionsResult(MapNonNullableIGetTransactions_TransactionsNonNullableArray(info.Transactions, snapshot));
+            }
+
+            throw new global::System.ArgumentException("GetTransactionsResultInfo expected.");
+        }
+
+        private global::System.Collections.Generic.IReadOnlyList<global::TransactionsGraphQLClient.IGetTransactions_Transactions> MapNonNullableIGetTransactions_TransactionsNonNullableArray(global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.EntityId>? list, global::StrawberryShake.IEntityStoreSnapshot snapshot)
+        {
+            if (list is null)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            var transactions = new global::System.Collections.Generic.List<global::TransactionsGraphQLClient.IGetTransactions_Transactions>();
+            foreach (global::StrawberryShake.EntityId child in list)
+            {
+                transactions.Add(MapNonNullableIGetTransactions_Transactions(child, snapshot));
+            }
+
+            return transactions;
+        }
+
+        private global::TransactionsGraphQLClient.IGetTransactions_Transactions MapNonNullableIGetTransactions_Transactions(global::StrawberryShake.EntityId entityId, global::StrawberryShake.IEntityStoreSnapshot snapshot)
+        {
+            if (entityId.Name.Equals("Transaction", global::System.StringComparison.Ordinal))
+            {
+                return _getTransactions_Transactions_TransactionFromTransactionEntityMapper.Map(snapshot.GetEntity<global::TransactionsGraphQLClient.State.TransactionEntity>(entityId) ?? throw new global::StrawberryShake.GraphQLClientException());
+            }
+
+            throw new global::System.NotSupportedException();
+        }
+
+        global::System.Object global::StrawberryShake.IOperationResultDataFactory.Create(global::StrawberryShake.IOperationResultDataInfo dataInfo, global::StrawberryShake.IEntityStoreSnapshot? snapshot)
+        {
+            return Create(dataInfo, snapshot);
+        }
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial class GetTransactionsResultInfo : global::StrawberryShake.IOperationResultDataInfo
+    {
+        private readonly global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> _entityIds;
+        private readonly global::System.UInt64 _version;
+        public GetTransactionsResultInfo(global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.EntityId> transactions, global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> entityIds, global::System.UInt64 version)
+        {
+            Transactions = transactions;
+            _entityIds = entityIds ?? throw new global::System.ArgumentNullException(nameof(entityIds));
+            _version = version;
+        }
+
+        public global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.EntityId> Transactions { get; }
+
+        public global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> EntityIds => _entityIds;
+        public global::System.UInt64 Version => _version;
+        public global::StrawberryShake.IOperationResultDataInfo WithVersion(global::System.UInt64 version)
+        {
+            return new GetTransactionsResultInfo(Transactions, _entityIds, version);
+        }
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial class GetTransactions_Transactions_TransactionFromTransactionEntityMapper : global::StrawberryShake.IEntityMapper<global::TransactionsGraphQLClient.State.TransactionEntity, GetTransactions_Transactions_Transaction>
+    {
+        private readonly global::StrawberryShake.IEntityStore _entityStore;
+        public GetTransactions_Transactions_TransactionFromTransactionEntityMapper(global::StrawberryShake.IEntityStore entityStore)
+        {
+            _entityStore = entityStore ?? throw new global::System.ArgumentNullException(nameof(entityStore));
+        }
+
+        public GetTransactions_Transactions_Transaction Map(global::TransactionsGraphQLClient.State.TransactionEntity entity, global::StrawberryShake.IEntityStoreSnapshot? snapshot = null)
+        {
+            if (snapshot is null)
+            {
+                snapshot = _entityStore.CurrentSnapshot;
+            }
+
+            return new GetTransactions_Transactions_Transaction(entity.Id, entity.FromIban, entity.ToIban, entity.Amount, entity.ExecutionDate);
+        }
     }
 
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
@@ -510,7 +947,166 @@ namespace TransactionsGraphQLClient.State
                 snapshot = _entityStore.CurrentSnapshot;
             }
 
-            return new GetPayments_Payments_Payment(entity.FromIban, entity.ToIban, entity.CreateDate, entity.Amount);
+            return new GetPayments_Payments_Payment(entity.Id, entity.FromIban, entity.ToIban, entity.Amount, entity.CreateDate);
+        }
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.7.0.0")]
+    public partial class GetTransactionsBuilder : global::StrawberryShake.IOperationResultBuilder<global::System.Text.Json.JsonDocument, global::TransactionsGraphQLClient.IGetTransactionsResult>
+    {
+        private readonly global::StrawberryShake.IEntityStore _entityStore;
+        private readonly global::StrawberryShake.IEntityIdSerializer _idSerializer;
+        private readonly global::StrawberryShake.IOperationResultDataFactory<global::TransactionsGraphQLClient.IGetTransactionsResult> _resultDataFactory;
+        private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.String, global::System.Guid> _uUIDParser;
+        private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.String, global::System.String> _stringParser;
+        private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.Double, global::System.Double> _floatParser;
+        private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.String, global::System.DateTimeOffset> _dateTimeParser;
+        public GetTransactionsBuilder(global::StrawberryShake.IEntityStore entityStore, global::StrawberryShake.IEntityIdSerializer idSerializer, global::StrawberryShake.IOperationResultDataFactory<global::TransactionsGraphQLClient.IGetTransactionsResult> resultDataFactory, global::StrawberryShake.Serialization.ISerializerResolver serializerResolver)
+        {
+            _entityStore = entityStore ?? throw new global::System.ArgumentNullException(nameof(entityStore));
+            _idSerializer = idSerializer ?? throw new global::System.ArgumentNullException(nameof(idSerializer));
+            _resultDataFactory = resultDataFactory ?? throw new global::System.ArgumentNullException(nameof(resultDataFactory));
+            _uUIDParser = serializerResolver.GetLeafValueParser<global::System.String, global::System.Guid>("UUID") ?? throw new global::System.ArgumentException("No serializer for type `UUID` found.");
+            _stringParser = serializerResolver.GetLeafValueParser<global::System.String, global::System.String>("String") ?? throw new global::System.ArgumentException("No serializer for type `String` found.");
+            _floatParser = serializerResolver.GetLeafValueParser<global::System.Double, global::System.Double>("Float") ?? throw new global::System.ArgumentException("No serializer for type `Float` found.");
+            _dateTimeParser = serializerResolver.GetLeafValueParser<global::System.String, global::System.DateTimeOffset>("DateTime") ?? throw new global::System.ArgumentException("No serializer for type `DateTime` found.");
+        }
+
+        public global::StrawberryShake.IOperationResult<IGetTransactionsResult> Build(global::StrawberryShake.Response<global::System.Text.Json.JsonDocument> response)
+        {
+            (IGetTransactionsResult Result, GetTransactionsResultInfo Info)? data = null;
+            global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.IClientError>? errors = null;
+            if (response.Exception is null)
+            {
+                try
+                {
+                    if (response.Body != null)
+                    {
+                        if (response.Body.RootElement.TryGetProperty("data", out global::System.Text.Json.JsonElement dataElement) && dataElement.ValueKind == global::System.Text.Json.JsonValueKind.Object)
+                        {
+                            data = BuildData(dataElement);
+                        }
+
+                        if (response.Body.RootElement.TryGetProperty("errors", out global::System.Text.Json.JsonElement errorsElement))
+                        {
+                            errors = global::StrawberryShake.Json.JsonErrorParser.ParseErrors(errorsElement);
+                        }
+                    }
+                }
+                catch (global::System.Exception ex)
+                {
+                    errors = new global::StrawberryShake.IClientError[]{new global::StrawberryShake.ClientError(ex.Message, exception: ex, extensions: new global::System.Collections.Generic.Dictionary<global::System.String, global::System.Object?>{{"body", response.Body?.RootElement.ToString()}})};
+                }
+            }
+            else
+            {
+                if (response.Body != null && response.Body.RootElement.TryGetProperty("errors", out global::System.Text.Json.JsonElement errorsElement))
+                {
+                    errors = global::StrawberryShake.Json.JsonErrorParser.ParseErrors(errorsElement);
+                }
+                else
+                {
+                    errors = new global::StrawberryShake.IClientError[]{new global::StrawberryShake.ClientError(response.Exception.Message, exception: response.Exception, extensions: new global::System.Collections.Generic.Dictionary<global::System.String, global::System.Object?>{{"body", response.Body?.RootElement.ToString()}})};
+                }
+            }
+
+            return new global::StrawberryShake.OperationResult<IGetTransactionsResult>(data?.Result, data?.Info, _resultDataFactory, errors);
+        }
+
+        private (IGetTransactionsResult, GetTransactionsResultInfo) BuildData(global::System.Text.Json.JsonElement obj)
+        {
+            var entityIds = new global::System.Collections.Generic.HashSet<global::StrawberryShake.EntityId>();
+            global::StrawberryShake.IEntityStoreSnapshot snapshot = default !;
+            global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.EntityId> transactionsId = default !;
+            _entityStore.Update(session =>
+            {
+                transactionsId = UpdateNonNullableIGetTransactions_TransactionsEntityNonNullableArray(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "transactions"), entityIds);
+                snapshot = session.CurrentSnapshot;
+            });
+            var resultInfo = new GetTransactionsResultInfo(transactionsId, entityIds, snapshot.Version);
+            return (_resultDataFactory.Create(resultInfo), resultInfo);
+        }
+
+        private global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.EntityId> UpdateNonNullableIGetTransactions_TransactionsEntityNonNullableArray(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            var transactions = new global::System.Collections.Generic.List<global::StrawberryShake.EntityId>();
+            foreach (global::System.Text.Json.JsonElement child in obj.Value.EnumerateArray())
+            {
+                transactions.Add(UpdateNonNullableIGetTransactions_TransactionsEntity(session, child, entityIds));
+            }
+
+            return transactions;
+        }
+
+        private global::StrawberryShake.EntityId UpdateNonNullableIGetTransactions_TransactionsEntity(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            global::StrawberryShake.EntityId entityId = _idSerializer.Parse(obj.Value);
+            entityIds.Add(entityId);
+            if (entityId.Name.Equals("Transaction", global::System.StringComparison.Ordinal))
+            {
+                if (session.CurrentSnapshot.TryGetEntity(entityId, out global::TransactionsGraphQLClient.State.TransactionEntity? entity))
+                {
+                    session.SetEntity(entityId, new global::TransactionsGraphQLClient.State.TransactionEntity(DeserializeNonNullableGuid(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "id")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "fromIban")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "toIban")), DeserializeNonNullableDouble(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "amount")), DeserializeNonNullableDateTimeOffset(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "executionDate"))));
+                }
+                else
+                {
+                    session.SetEntity(entityId, new global::TransactionsGraphQLClient.State.TransactionEntity(DeserializeNonNullableGuid(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "id")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "fromIban")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "toIban")), DeserializeNonNullableDouble(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "amount")), DeserializeNonNullableDateTimeOffset(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "executionDate"))));
+                }
+
+                return entityId;
+            }
+
+            throw new global::System.NotSupportedException();
+        }
+
+        private global::System.Guid DeserializeNonNullableGuid(global::System.Text.Json.JsonElement? obj)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            return _uUIDParser.Parse(obj.Value.GetString()!);
+        }
+
+        private global::System.String DeserializeNonNullableString(global::System.Text.Json.JsonElement? obj)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            return _stringParser.Parse(obj.Value.GetString()!);
+        }
+
+        private global::System.Double DeserializeNonNullableDouble(global::System.Text.Json.JsonElement? obj)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            return _floatParser.Parse(obj.Value.GetDouble()!);
+        }
+
+        private global::System.DateTimeOffset DeserializeNonNullableDateTimeOffset(global::System.Text.Json.JsonElement? obj)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            return _dateTimeParser.Parse(obj.Value.GetString()!);
         }
     }
 
@@ -520,17 +1116,19 @@ namespace TransactionsGraphQLClient.State
         private readonly global::StrawberryShake.IEntityStore _entityStore;
         private readonly global::StrawberryShake.IEntityIdSerializer _idSerializer;
         private readonly global::StrawberryShake.IOperationResultDataFactory<global::TransactionsGraphQLClient.IGetPaymentsResult> _resultDataFactory;
+        private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.String, global::System.Guid> _uUIDParser;
         private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.String, global::System.String> _stringParser;
-        private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.String, global::System.DateTimeOffset> _dateTimeParser;
         private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.Double, global::System.Double> _floatParser;
+        private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.String, global::System.DateTimeOffset> _dateTimeParser;
         public GetPaymentsBuilder(global::StrawberryShake.IEntityStore entityStore, global::StrawberryShake.IEntityIdSerializer idSerializer, global::StrawberryShake.IOperationResultDataFactory<global::TransactionsGraphQLClient.IGetPaymentsResult> resultDataFactory, global::StrawberryShake.Serialization.ISerializerResolver serializerResolver)
         {
             _entityStore = entityStore ?? throw new global::System.ArgumentNullException(nameof(entityStore));
             _idSerializer = idSerializer ?? throw new global::System.ArgumentNullException(nameof(idSerializer));
             _resultDataFactory = resultDataFactory ?? throw new global::System.ArgumentNullException(nameof(resultDataFactory));
+            _uUIDParser = serializerResolver.GetLeafValueParser<global::System.String, global::System.Guid>("UUID") ?? throw new global::System.ArgumentException("No serializer for type `UUID` found.");
             _stringParser = serializerResolver.GetLeafValueParser<global::System.String, global::System.String>("String") ?? throw new global::System.ArgumentException("No serializer for type `String` found.");
-            _dateTimeParser = serializerResolver.GetLeafValueParser<global::System.String, global::System.DateTimeOffset>("DateTime") ?? throw new global::System.ArgumentException("No serializer for type `DateTime` found.");
             _floatParser = serializerResolver.GetLeafValueParser<global::System.Double, global::System.Double>("Float") ?? throw new global::System.ArgumentException("No serializer for type `Float` found.");
+            _dateTimeParser = serializerResolver.GetLeafValueParser<global::System.String, global::System.DateTimeOffset>("DateTime") ?? throw new global::System.ArgumentException("No serializer for type `DateTime` found.");
         }
 
         public global::StrawberryShake.IOperationResult<IGetPaymentsResult> Build(global::StrawberryShake.Response<global::System.Text.Json.JsonDocument> response)
@@ -617,17 +1215,27 @@ namespace TransactionsGraphQLClient.State
             {
                 if (session.CurrentSnapshot.TryGetEntity(entityId, out global::TransactionsGraphQLClient.State.PaymentEntity? entity))
                 {
-                    session.SetEntity(entityId, new global::TransactionsGraphQLClient.State.PaymentEntity(DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "fromIban")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "toIban")), DeserializeNonNullableDateTimeOffset(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "createDate")), DeserializeNonNullableDouble(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "amount"))));
+                    session.SetEntity(entityId, new global::TransactionsGraphQLClient.State.PaymentEntity(DeserializeNonNullableGuid(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "id")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "fromIban")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "toIban")), DeserializeNonNullableDouble(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "amount")), DeserializeNonNullableDateTimeOffset(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "createDate"))));
                 }
                 else
                 {
-                    session.SetEntity(entityId, new global::TransactionsGraphQLClient.State.PaymentEntity(DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "fromIban")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "toIban")), DeserializeNonNullableDateTimeOffset(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "createDate")), DeserializeNonNullableDouble(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "amount"))));
+                    session.SetEntity(entityId, new global::TransactionsGraphQLClient.State.PaymentEntity(DeserializeNonNullableGuid(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "id")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "fromIban")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "toIban")), DeserializeNonNullableDouble(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "amount")), DeserializeNonNullableDateTimeOffset(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "createDate"))));
                 }
 
                 return entityId;
             }
 
             throw new global::System.NotSupportedException();
+        }
+
+        private global::System.Guid DeserializeNonNullableGuid(global::System.Text.Json.JsonElement? obj)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            return _uUIDParser.Parse(obj.Value.GetString()!);
         }
 
         private global::System.String DeserializeNonNullableString(global::System.Text.Json.JsonElement? obj)
@@ -640,16 +1248,6 @@ namespace TransactionsGraphQLClient.State
             return _stringParser.Parse(obj.Value.GetString()!);
         }
 
-        private global::System.DateTimeOffset DeserializeNonNullableDateTimeOffset(global::System.Text.Json.JsonElement? obj)
-        {
-            if (!obj.HasValue)
-            {
-                throw new global::System.ArgumentNullException();
-            }
-
-            return _dateTimeParser.Parse(obj.Value.GetString()!);
-        }
-
         private global::System.Double DeserializeNonNullableDouble(global::System.Text.Json.JsonElement? obj)
         {
             if (!obj.HasValue)
@@ -658,6 +1256,16 @@ namespace TransactionsGraphQLClient.State
             }
 
             return _floatParser.Parse(obj.Value.GetDouble()!);
+        }
+
+        private global::System.DateTimeOffset DeserializeNonNullableDateTimeOffset(global::System.Text.Json.JsonElement? obj)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            return _dateTimeParser.Parse(obj.Value.GetString()!);
         }
     }
 
@@ -671,6 +1279,7 @@ namespace TransactionsGraphQLClient.State
             global::System.String __typename = obj.GetProperty("__typename").GetString()!;
             return __typename switch
             {
+                "Transaction" => ParseTransactionEntityId(obj, __typename),
                 "Payment" => ParsePaymentEntityId(obj, __typename),
                 _ => throw new global::System.NotSupportedException()};
         }
@@ -679,8 +1288,26 @@ namespace TransactionsGraphQLClient.State
         {
             return entityId.Name switch
             {
+                "Transaction" => FormatTransactionEntityId(entityId),
                 "Payment" => FormatPaymentEntityId(entityId),
                 _ => throw new global::System.NotSupportedException()};
+        }
+
+        private global::StrawberryShake.EntityId ParseTransactionEntityId(global::System.Text.Json.JsonElement obj, global::System.String type)
+        {
+            return new global::StrawberryShake.EntityId(type, obj.GetProperty("id").GetString()!);
+        }
+
+        private global::System.String FormatTransactionEntityId(global::StrawberryShake.EntityId entityId)
+        {
+            using var writer = new global::StrawberryShake.Internal.ArrayWriter();
+            using var jsonWriter = new global::System.Text.Json.Utf8JsonWriter(writer, _options);
+            jsonWriter.WriteStartObject();
+            jsonWriter.WriteString("__typename", entityId.Name);
+            jsonWriter.WriteString("id", (global::System.String)entityId.Value);
+            jsonWriter.WriteEndObject();
+            jsonWriter.Flush();
+            return global::System.Text.Encoding.UTF8.GetString(writer.GetInternalBuffer(), 0, writer.Length);
         }
 
         private global::StrawberryShake.EntityId ParsePaymentEntityId(global::System.Text.Json.JsonElement obj, global::System.String type)

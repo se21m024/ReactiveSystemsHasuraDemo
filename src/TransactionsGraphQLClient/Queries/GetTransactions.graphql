@@ -1,0 +1,9 @@
+﻿query GetTransactions {
+  transactions {
+    id
+    fromIban
+    toIban
+    amount
+    executionDate
+  }
+}

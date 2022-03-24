@@ -1,0 +1,7 @@
+﻿mutation AddPayment($fromIban: String!, $toIban: String!, amount: Double!) {
+  addPayment(payment: { fromIban: $fromIban, toIban: $toIban, amount: $amount }) {
+    fromIban
+    toIban
+    amount
+  }
+}
