@@ -17,12 +17,13 @@ namespace TransactionsData
             _container = cosmosClient.GetContainer(databaseName, containerName);
         }
 
-        public async Task AddPaymentAsync(TransactionsCore.Models.Payment payment, CancellationToken ct)
+        public async Task<TransactionsCore.Models.Payment> AddPaymentAsync(TransactionsCore.Models.PaymentRequest payment, CancellationToken ct)
         {
             var entity = payment.ToEntity();
             entity.Id = Guid.NewGuid();
 
             await _container.CreateItemAsync(entity, cancellationToken: ct);
+            return entity.ToModel();
         }
 
         public async Task<IEnumerable<TransactionsCore.Models.Payment>> GetPaymentsAsync(CancellationToken ct)
@@ -40,12 +41,13 @@ namespace TransactionsData
                 .ToModel();
         }
 
-        public async Task AddTransactionAsync(TransactionsCore.Models.Transaction transaction, CancellationToken ct)
+        public async Task<TransactionsCore.Models.Transaction> AddTransactionAsync(TransactionsCore.Models.Transaction transaction, CancellationToken ct)
         {
             var entity = transaction.ToEntity();
             entity.Id = Guid.NewGuid();
 
             await _container.CreateItemAsync(entity, cancellationToken: ct);
+            return entity.ToModel();
         }
 
         public async Task<IEnumerable<TransactionsCore.Models.Transaction>> GetTransactionsAsync(CancellationToken ct)

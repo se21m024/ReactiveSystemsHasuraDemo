@@ -16,14 +16,14 @@ namespace TransactionsData
             _payments = new();
             _transactions = new();
 
-            var payment1 = new TransactionsCore.Models.Payment
+            var payment1 = new TransactionsCore.Models.PaymentRequest
             {
                 FromIban = "Iban1",
                 ToIban = "Iban2",
                 Amount = 23.4,
             };
 
-            var payment2 = new TransactionsCore.Models.Payment
+            var payment2 = new TransactionsCore.Models.PaymentRequest
             {
                 FromIban = "Iban2",
                 ToIban = "Iban4",
@@ -34,7 +34,7 @@ namespace TransactionsData
             this.AddPaymentAsync(payment2, CancellationToken.None).GetAwaiter().GetResult();
         }
 
-        public async Task AddPaymentAsync(TransactionsCore.Models.Payment payment, CancellationToken ct)
+        public async Task<TransactionsCore.Models.Payment> AddPaymentAsync(TransactionsCore.Models.PaymentRequest payment, CancellationToken ct)
         {
             var entity = payment.ToEntity();
             entity.Id = Guid.NewGuid();
@@ -43,6 +43,8 @@ namespace TransactionsData
             {
                 throw new Exception("Failed to persist payment.");
             }
+
+            return entity.ToModel();
         }
 
         public async Task<IEnumerable<TransactionsCore.Models.Payment>> GetPaymentsAsync(CancellationToken ct)
@@ -55,7 +57,7 @@ namespace TransactionsData
             return _payments.Values.Single(x => x.Id == id).ToModel();
         }
 
-        public async Task AddTransactionAsync(TransactionsCore.Models.Transaction transaction, CancellationToken ct)
+        public async Task<TransactionsCore.Models.Transaction> AddTransactionAsync(TransactionsCore.Models.Transaction transaction, CancellationToken ct)
         {
             var entity = transaction.ToEntity();
             entity.Id = Guid.NewGuid();
@@ -64,6 +66,8 @@ namespace TransactionsData
             {
                 throw new Exception("Failed to persist transaction.");
             }
+
+            return entity.ToModel();
         }
 
         public async Task<IEnumerable<TransactionsCore.Models.Transaction>> GetTransactionsAsync(CancellationToken ct)

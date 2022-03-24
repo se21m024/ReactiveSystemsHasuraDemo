@@ -1,0 +1,29 @@
+mutation {
+  addPayment(payment: { fromIban: "hiA", toIban: "hiB", amount: 45.68 }) {
+    id
+    fromIban
+    toIban
+    amount
+    createDate
+  }
+}
+
+query {
+  payments {
+    fromIban
+    toIban
+    id
+    createDate
+    amount
+  }
+}
+
+query {
+  paymentById (id: "a9546080-1a48-4e08-bf66-2aeef12eba03") {
+    fromIban,
+    toIban,
+    id,
+    createDate,
+    amount
+  }
+}

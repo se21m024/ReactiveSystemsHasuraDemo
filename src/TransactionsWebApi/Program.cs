@@ -29,7 +29,9 @@ builder.Services.AddSingleton<ITransactionsRepository, TransactionsRepositoryInM
 //builder.Services.AddSingleton<ITransactionsRepository>(
 //    DependencyInjection.InitializeCosmosClientInstance(builder.Configuration.GetSection("CosmosDb")));
 
-builder.Services.AddGraphQLServer().AddQueryType<Query>();
+builder.Services.AddGraphQLServer()
+    .AddQueryType<Query>()
+    .AddMutationType<Mutation>();
 
 var app = builder.Build();
 

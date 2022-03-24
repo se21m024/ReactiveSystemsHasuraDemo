@@ -26,7 +26,7 @@ namespace TransactionsWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task Post([FromBody] Payment payment, CancellationToken ct = default)
+        public async Task Add([FromBody] PaymentRequest payment, CancellationToken ct = default)
         {
             await _transactionsRepository.AddPaymentAsync(payment, ct);
         }
