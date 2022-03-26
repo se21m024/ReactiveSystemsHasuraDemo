@@ -33,7 +33,7 @@ The data is persited in an Heroku database and accessible via the GraphQL enpoin
 
 The Web GUI was implemented as .NET 6 Blazor project.
 The Web API was implemented as .NET 6 Web Api project.
-Both reference a common project '' that capsulates the functionality provided by the GraphQL .NET library Strawberry Shake (https://chillicream.com/docs/strawberryshake).<br/><br/>
+Both reference a common project 'TransactionsGraphQLClient' that encapsulates the functionality provided by the GraphQL .NET library Strawberry Shake (https://chillicream.com/docs/strawberryshake).<br/><br/>
 
 # Web GUI (User interface)
 
