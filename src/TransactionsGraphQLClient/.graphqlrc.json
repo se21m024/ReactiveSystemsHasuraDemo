@@ -3,9 +3,9 @@
   "documents": "**/*.graphql",
   "extensions": {
     "strawberryShake": {
-      "name": "TransactionsClient",
+      "name": "GraphQlClient",
       "namespace": "TransactionsGraphQLClient",
-      "url": "https://appservicecode.azurewebsites.net/graphql/",
+      "url": "https://transactions-demo.hasura.app/v1/graphql/",
       "dependencyInjection": true,
       "strictSchemaValidation": true,
       "hashAlgorithm": "md5",

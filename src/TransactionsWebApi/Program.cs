@@ -1,6 +1,5 @@
-using TransactionsCore.Interfaces;
-using TransactionsData;
-using TransactionsGraphQL.Resolvers;
+using TransactionsGraphQLClient;
+using TransactionsGui;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,21 +16,28 @@ builder.Services.AddCors(options =>
         });
 });
 
+//builder.Services.AddScoped(sp =>
+//    new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+builder.Services
+    .AddGraphQlClient()
+    .ConfigureHttpClient(client =>
+    {
+        client.BaseAddress = new Uri(Const.GraphQlHttpUri);
+        client.DefaultRequestHeaders.Add(Const.AuthHeaderKey, Const.AuthHeaderValue);
+    })
+
+    // Not working because WebService endpoint of Hasura Cloud Instance cannot be found.
+    .ConfigureWebSocketClient(client =>
+    {
+        client.Uri = new Uri(Const.GraphQlWsUri);
+        client.ConnectionInterceptor = new CustomConnectionInterceptor();
+    });
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// In Memory
-builder.Services.AddSingleton<ITransactionsRepository, TransactionsRepositoryInMemory>();
-
-// CosmosDb
-//builder.Services.AddSingleton<ITransactionsRepository>(
-//    DependencyInjection.InitializeCosmosClientInstance(builder.Configuration.GetSection("CosmosDb")));
-
-builder.Services.AddGraphQLServer()
-    .AddQueryType<Query>()
-    .AddMutationType<Mutation>();
 
 var app = builder.Build();
 
@@ -44,7 +50,6 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
-    endpoints.MapGraphQL();
 });
 app.UseHttpsRedirection();
 
@@ -52,3 +57,5 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.Run();
+
+

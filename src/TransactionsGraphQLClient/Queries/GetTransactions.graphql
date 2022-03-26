@@ -1,9 +1,10 @@
 ﻿query GetTransactions {
-  transactions {
-    id
-    fromIban
-    toIban
-    amount
-    executionDate
+  Transactions {
+    Amount
+    ExecutionDate
+    FromIban
+    Id
+    ToIban
+    PaymentId
   }
 }

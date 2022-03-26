@@ -8,12 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TransactionsCore\TransactionsCore.csproj" />
-    <ProjectReference Include="..\TransactionsData\TransactionsData.csproj" />
-    <ProjectReference Include="..\TransactionsGraphQL\TransactionsGraphQL.csproj" />
+    <ProjectReference Include="..\TransactionsGraphQLClient\TransactionsGraphQLClient.csproj" />
   </ItemGroup>
 
 </Project>

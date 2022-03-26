@@ -1,9 +1,9 @@
 ﻿query GetPayments {
-  payments {
-    id
-    fromIban
-    toIban
-    amount
-    createDate
+  Payments {
+    Amount
+    CreateDate
+    FromIban
+    Id
+    ToIban
   }
 }

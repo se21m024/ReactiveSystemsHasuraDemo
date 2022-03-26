@@ -1,0 +1,10 @@
+﻿subscription SubNewTransaction {
+    Transactions(limit: 1, order_by: {ExecutionDate: desc}) {
+        Amount
+        ExecutionDate
+        FromIban
+        Id
+        ToIban
+        PaymentId
+    }
+}

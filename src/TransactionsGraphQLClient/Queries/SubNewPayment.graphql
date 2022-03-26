@@ -1,0 +1,9 @@
+﻿subscription SubNewPayment {
+    Payments(limit: 1, order_by: {CreateDate: desc}) {
+        Amount
+        CreateDate
+        FromIban
+        Id
+        ToIban
+    }
+}
