@@ -7,7 +7,6 @@ namespace TransactionsGraphQLClient
     public class CustomConnectionInterceptor
         : ISocketConnectionInterceptor
     {
-        // the object returned by this method, will be included in the connection initialization message
         public ValueTask<object?> CreateConnectionInitPayload(
             ISocketProtocol protocol,
             CancellationToken cancellationToken)
