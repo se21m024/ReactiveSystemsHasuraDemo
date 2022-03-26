@@ -7,16 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <GraphQL Remove="Mutations\AddPayment.graphql" />
-    <GraphQL Remove="Queries\GetTransactions.graphql" />
+    <GraphQL Remove="Queries\AddPayment.graphql" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Queries\GetTransactions.graphql" />
+    <None Remove="Queries\AddPayment.graphql" />
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="Queries\GetTransactions.graphql">
+    <AdditionalFiles Include="Queries\AddPayment.graphql">
       <GraphQL>true</GraphQL>
     </AdditionalFiles>
   </ItemGroup>
@@ -26,6 +25,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="StrawberryShake.CodeGeneration.CSharp.Analyzers" Version="12.7.0" />
     <PackageReference Include="StrawberryShake.Transport.Http" Version="12.7.0" />
+    <PackageReference Include="StrawberryShake.Transport.WebSockets" Version="12.7.0" />
   </ItemGroup>
 
   <ItemGroup>

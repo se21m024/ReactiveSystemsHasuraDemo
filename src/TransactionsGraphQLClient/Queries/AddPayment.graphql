@@ -1,0 +1,9 @@
+﻿mutation AddPayment($fromIban: String!, $toIban: String!, $amount: Float!, $createDate: timestamptz!) {
+    insert_Payments_one(object: { FromIban: $fromIban, ToIban: $toIban, Amount: $amount, CreateDate: $createDate }) {
+        Id
+        FromIban
+        ToIban
+        Amount
+        CreateDate
+    }
+}

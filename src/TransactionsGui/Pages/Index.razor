@@ -1,22 +1,43 @@
 ﻿@page "/"
-@inject TransactionsClient TransactionsClient
+@inject GraphQlClient graphQlClient
 @implements IDisposable
+
+<HeadContent>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
+</HeadContent>
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Hasura Demo Project</h1>
 
-Welcome to your new app.
+Implemented by student se21m024.<br><br>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<label for="fromIban">From IBAN:</label><br>
 
-<h2>Payments</h2>
+<input type="text" id="fromIban" name="fromIban" @bind="@FromIbanInput"><br><br>
+
+<label for="toIban">To IBAN:</label><br>
+
+<input type="text" id="toIban" name="toIban" @bind="@ToIbanInput"><br><br>
+
+<label for="amount">Amount [€]:</label><br>
+
+<input type="number" id="amount" name="amount" @bind="@AmountInput"><br><br>
+
+<input type="submit" value="Create Payment" @onclick="() => OnClickAdd()"><br><br>
+
+<input type="submit" value="Reload Hasura Data" @onclick="() => Reload()">
+
+<br><br>
+
+<h2>Payments (latest 5)</h2>
 <ul>
     @foreach (var payment in payments) {
         <li>@payment</li>
     }
 </ul>
-<h2>Transactions</h2>
+
+<h2>Transactions (latest 5)</h2>
 <ul>
     @foreach (var transaction in transactions) {
         <li>@transaction</li>
@@ -24,60 +45,121 @@ Welcome to your new app.
 </ul>
 
 @code {
-    private string[] payments = Array.Empty<string>();
-    private string[] transactions = Array.Empty<string>();
+    private List<string> payments = new List<string>();
+    private List<string> transactions = new List<string>();
 
-    // Fetch only once
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    var result = await TransactionsClient.GetPayments.ExecuteAsync();
-    //    payments = result.Data.Payments
-    //        .Select(x => $"From {x.FromIban}, To {x.ToIban}: {x.Amount}")
-    //        .ToArray();
-    //}
+    private string FromIbanInput { get; set; } = string.Empty;
+    private string ToIbanInput { get; set; } = string.Empty;
+    private double AmountInput { get; set; } = 0;
 
     // Subscribe for push -> does not work. Issue: Fetches only when menu is (re)initialized
     private IDisposable storePayment;
+    private IDisposable storeNewPayment;
     private IDisposable storeTransaction;
 
-    protected override void OnInitialized()
+    protected override async Task OnParametersSetAsync()
     {
-        storePayment =
-            TransactionsClient
-                .GetPayments
-    //.Watch(StrawberryShake.ExecutionStrategy.CacheFirst)
-                .Watch(StrawberryShake.ExecutionStrategy.NetworkOnly)
-                .Where(t => !t.Errors.Any())
-                .Select(t =>
-                    t.Data.Payments
-                        .Select(x => $"From '{x.FromIban}' to '{x.ToIban}': {x.Amount} €, at '{x.CreateDate}'")
-                        .ToArray())
-                .Subscribe(result =>
-                {
-                    payments = result;
-                    StateHasChanged();
-                });
+        await LoadHasuraData();
+    }
 
-        storeTransaction =
-            TransactionsClient
-                .GetTransactions
-    //.Watch(StrawberryShake.ExecutionStrategy.CacheFirst)
-                .Watch(StrawberryShake.ExecutionStrategy.NetworkOnly)
-                .Where(t => !t.Errors.Any())
-                .Select(t =>
-                    t.Data.Transactions
-                        .Select(x => $"From '{x.FromIban}' to '{x.ToIban}': {x.Amount} €, at '{x.ExecutionDate}'")
-                        .ToArray())
-                .Subscribe(result =>
-                {
-                    transactions = result;
-                    StateHasChanged();
-                });
+    private async Task Reload()
+    {
+        await LoadHasuraData();
     }
 
     public void Dispose()
     {
         storePayment?.Dispose();
+        storeNewPayment?.Dispose();
         storeTransaction?.Dispose();
+    }
+
+    private async Task LoadHasuraData()
+    {
+        storePayment =
+            graphQlClient
+                .GetPayments
+                .Watch(StrawberryShake.ExecutionStrategy.CacheAndNetwork)
+                .Where(t => !t.Errors.Any())
+                .Select(t =>
+                    t.Data?.Payments
+                        .OrderByDescending(x => x.CreateDate)
+                        .Take(5)
+                        .Select(ToString)
+                        .ToList()
+                    ?? new List<string>())
+                .Subscribe(result =>
+                {
+                    payments.Clear();
+                    payments.AddRange(result);
+                    StateHasChanged();
+                });
+
+        storeTransaction =
+            graphQlClient
+                .GetTransactions
+                .Watch(StrawberryShake.ExecutionStrategy.CacheAndNetwork)
+                .Where(t => !t.Errors.Any())
+                .Select(t =>
+                    t.Data?.Transactions
+                        .OrderByDescending(x => x.ExecutionDate)
+                        .Take(5)
+                        .Select(ToString)
+                        .ToList()
+                    ?? new List<string>())
+                .Subscribe(result =>
+                {
+                    transactions.Clear();
+                    transactions.AddRange(result);
+                    StateHasChanged();
+                });
+
+    // Not working because WebService endpoint of Hasura Cloud Instance cannot be found.
+
+    //var obs = graphQlClient.SubNewPayment.Watch();
+    //storeNewPayment =
+    //    obs
+    //        .Subscribe(result =>
+    //        {
+    //            var newPayment = ToString(result.Data?.Payments.FirstOrDefault());
+    //            Console.WriteLine($"Received new payment: {newPayment}.");
+    //            payments.Add(newPayment);
+    //            StateHasChanged();
+    //        });
+    //await obs;
+    }
+
+    private async Task OnClickAdd()
+    {
+        Console.WriteLine($"Submit button was clicked: from IBAN <{FromIbanInput}>, to IBAN <{ToIbanInput}>, amount <{AmountInput}> €.");
+        await graphQlClient.AddPayment.ExecuteAsync(FromIbanInput, ToIbanInput, AmountInput, DateTimeOffset.Now.ToString("o"));
+        Console.WriteLine($"Created payment.");
+
+        FromIbanInput = string.Empty;
+        ToIbanInput = string.Empty;
+        AmountInput = 0;
+
+        await Task.Delay(1000);
+        Reload();
+    }
+
+    private static string ToString(IGetPayments_Payments x)
+    {
+        return $"Id '{x.Id}': From '{x.FromIban}' to '{x.ToIban}': {x.Amount} €, created at '{x.CreateDate}'";
+    }
+
+    private static string ToString(ISubNewPayment_Payments? x)
+    {
+        if (x is null)
+        {
+            return "Error";
+        }
+
+        return $"Id '{x.Id}': From '{x.FromIban}' to '{x.ToIban}': {x.Amount} €, created at '{x.CreateDate}'";
+    }
+
+    private static string ToString(IGetTransactions_Transactions x)
+    {
+        return $"Id '{x.Id}': PaymentId '{x.PaymentId}' From '{x.FromIban}' to '{x.ToIban}': {x.Amount} €, executed at '{x.ExecutionDate}'";
     }
 }
